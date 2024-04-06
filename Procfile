@@ -1,0 +1,1 @@
+web: Rscript plumber.R

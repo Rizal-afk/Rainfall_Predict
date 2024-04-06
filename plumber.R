@@ -2,22 +2,6 @@
 library(plumber)
 library(jsonlite)
 
-# Install RJSONIO package if not already installed
-if (!requireNamespace("RJSONIO", quietly = TRUE)) {
-  install.packages("RJSONIO")
-}
-
-# Load RJSONIO package
-library(RJSONIO)
-
-# Install C50 package if not already installed
-if (!requireNamespace("C50", quietly = TRUE)) {
-  install.packages("C50")
-}
-
-# Load C50 package
-library(C50)
-
 options("plumber.port" = 8080)
 
 modelc5 <- readRDS(file = 'c50_model.rds')

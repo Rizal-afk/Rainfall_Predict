@@ -1,7 +1,6 @@
 #plumber.R
 library(plumber)
 library(jsonlite)
-library(RJSONIO)
 library(C50)
 
 options("plumber.port" = 8080)

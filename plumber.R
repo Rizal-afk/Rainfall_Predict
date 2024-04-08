@@ -22,7 +22,7 @@ function() {
 #' @post /C50_predict
 function(req,res){
   req_data <- req$postBody
-  req_json <- fromJSON(req_data)
+  req_json <- fromJSON(req_data, null = "NA")
   new_data <- data.frame(
     suhuMin = req_json[["suhuMin"]],
     suhuMax = req_json[["suhuMax"]],
@@ -42,7 +42,7 @@ function(req,res){
 #' @post /C50Wipso_predict
 function(req,res){
   req_data <- req$postBody
-  req_json <- fromJSON(req_data, nullValue=NA)
+  req_json <- fromJSON(req_data, null= "NA")
   new_data <- data.frame(
     suhuMin = req_json[["suhuMin"]],
     suhuMax = req_json[["suhuMax"]],

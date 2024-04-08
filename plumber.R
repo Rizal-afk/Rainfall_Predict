@@ -1,6 +1,7 @@
 #plumber.R
 library(plumber)
 library(jsonlite)
+library(C50)
 
 modelc5 <- readRDS(file = 'c50_model.rds')
 modelc5Wipso <- readRDS(file = 'c50_model+Wipso.rds')

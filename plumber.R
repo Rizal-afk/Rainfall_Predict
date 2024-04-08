@@ -14,6 +14,11 @@ cors <- function(req, res) {
   plumber::forward()
 }
 
+#* @get /
+function() {
+  list("Model C50 dan Wipso Curah Hujan ")
+}
+
 #' @post /C50_predict
 function(req,res){
   req_data <- req$postBody

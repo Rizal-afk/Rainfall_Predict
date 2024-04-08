@@ -2,17 +2,6 @@
 library(plumber)
 library(jsonlite)
 
-
-my_packages = c('C50')
-install_if_missing = function(p) {
-    if (p %in% rownames(installed.packages()) == FALSE) {
-        install.packages(p, dependencies = TRUE)
-    }else{
-        cat(paste("Skipping already installed package:",p,"\n"))
-    }
-}
-invisible(sapply(my_packages, install_if_missing))
-
 modelc5 <- readRDS(file = 'c50_model.rds')
 modelc5Wipso <- readRDS(file = 'c50_model+Wipso.rds')
 

@@ -1,18 +1,22 @@
-# start from the rocker/r-ver:3.5.0 image
-FROM rstudio/plumber
+# Use an R base image
+FROM rocker/r-ver:4.1.1
 
-# Install required R packages
-RUN R -e "install.packages('plumber')"
-RUN R -e "install.packages('jsonlite')"
-RUN R -e "install.packages('C50')"
-RUN R -e "install.packages('libcoin')"
-RUN R -e "install.packages('libPath')"
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev
 
-# copy everything from the current directory into the container
-COPY / /
+# Install R packages
+RUN R -e "install.packages(c('plumber', 'jsonlite', 'C50'))"
 
-# open port 80 to traffic
-EXPOSE 80
+# Copy your Plumber API file into the container
+COPY plumber.R /app/plumber.R
 
-# when the container starts, start the main.R script
-ENTRYPOINT ["Rscript", "plumber.R"]
+# Set the working directory
+WORKDIR /app
+
+# Expose the port your Plumber API listens on
+EXPOSE 8000
+
+# Command to run the Plumber API
+CMD ["R", "-e", "pr <- plumber::plumb('plumber.R'); pr$run(host='0.0.0.0', port=8000)"]

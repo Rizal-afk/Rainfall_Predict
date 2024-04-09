@@ -2,29 +2,40 @@
 library(plumber)
 library(jsonlite)
 library(C50)
+library(RJSONIO)
 
+modelc5 <- readRDS('c50_model.rds')
+modelc5Wipso <- readRDS('c50Wipso_model.rds')
 
-modelc5 <- readRDS(file = 'c50_model.rds')
-modelc5Wipso <- readRDS(file = 'c50_model+Wipso.rds')
-
-#* @filter cors
+#' @filter cors
 cors <- function(req, res) {
   res$setHeader("Access-Control-Allow-Origin", "*")
-  res$setHeader("Access-Control-Allow-Methods", "*")
-  res$setHeader("Access-Control-Allow-Headers", "Content-Type")
-  plumber::forward()
+  
+  if (req$REQUEST_METHOD == "OPTIONS") {
+    res$setHeader("Access-Control-Allow-Methods","*")
+    res$setHeader("Access-Control-Allow-Headers", req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS)
+    res$status <- 200 
+    return(list())
+  } else {
+    plumber::forward()
+  }
+  
 }
 
-#* @get /
-function() {
-  list("Model C50 dan Wipso Curah Hujan ")
+#* @apiTitle RainfallPredict API
+
+#' @get /
+#' @serializer print
+function(){
+  list('Weather Predictor Model')
 }
 
 #' @post /C50_predict
+#' @serializer print
 function(req,res){
   req_data <- req$postBody
-  req_json <- fromJSON(req_data)
-  req_json[sapply(req_json, is.null)] <- NA
+  req_json <- fromJSON(req_data, nullValue=NA)
+  print(req_json)
   new_data <- data.frame(
     suhuMin = req_json[["suhuMin"]],
     suhuMax = req_json[["suhuMax"]],
@@ -42,10 +53,10 @@ function(req,res){
 }
 
 #' @post /C50Wipso_predict
+#' @serializer print
 function(req,res){
   req_data <- req$postBody
-  req_json <- fromJSON(req_data)
-  req_json[sapply(req_json, is.null)] <- NA
+  req_json <- fromJSON(req_data, nullValue=NA)
   new_data <- data.frame(
     suhuMin = req_json[["suhuMin"]],
     suhuMax = req_json[["suhuMax"]],
